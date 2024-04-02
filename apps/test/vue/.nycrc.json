@@ -1,0 +1,14 @@
+{
+  "exclude": [
+    "node_modules",
+    "coverage/",
+    "cypress",
+    "src/components/barnstormerui/vue/components/BsIcons",
+    "src/components/barnstormerui/tests"
+  ],
+  "include": [
+    "src/components/barnstormerui/vue"
+  ],
+  "reporter": [],
+  "extension": [".js", ".ts", ".vue"]
+}

@@ -1,0 +1,265 @@
+const path = require('path');
+const fs = require('fs');
+const fsPromise = require('fs').promises;
+const { optimize } = require('svgo');
+
+/**
+ * Args:
+ * input: string; (directory with svg icons)
+ * output: string; (directory where icon components will be placed)
+ * relativePathToIconBase: string; (path from place of icon output to base icon e.g output `/specialDir/icons/`, component placement `/components/`, then relativePathToIconBase would be `../../components/`)
+ * absolutePathToIconBase: string; (absolute path to file with BaseIcon component `@barnstormer/react`)
+ * optimize: boolean; (optimize svgs wth svgo)
+ * */
+
+const getArgValue = (argName) => {
+    const argNameLength = argName.length;
+    const outputArg = Object.values(process.argv).find(param => param.substring(0, argNameLength) === argName);
+    return outputArg ? outputArg.substring(argNameLength + 1, outputArg.length) : undefined;
+}
+
+const inputDirectoryPath = path.join(__dirname, getArgValue('input') ?? './assets');
+const outputDirectoryPath = path.join(__dirname, getArgValue('output') ?? './');
+const relativePathToIconBasePath = getArgValue('relativePathToIconBase') ?? '../';
+const absolutePathToIconBase = getArgValue('absolutePathToIconBase');
+const framework = getArgValue('framework') ?? 'vue'; //vue, react
+
+// https://github.com/preactjs/preact-compat/issues/222
+const attributesMap = {
+    'accent-height': 'accentHeight',
+    'alignment-baseline': 'alignmentBaseline',
+    'arabic-form': 'arabicForm',
+    'baseline-shift': 'baselineShift',
+    'cap-height': 'capHeight',
+    'clip-path': 'clipPath',
+    'clip-rule': 'clipRule',
+    'color-interpolation': 'colorInterpolation',
+    'color-interpolation-filters': 'colorInterpolationFilters',
+    'color-profile': 'colorProfile',
+    'color-rendering': 'colorRendering',
+    'fill-opacity': 'fillOpacity',
+    'fill-rule': 'fillRule',
+    'flood-color': 'floodColor',
+    'flood-opacity': 'floodOpacity',
+    'font-family': 'fontFamily',
+    'font-size': 'fontSize',
+    'font-size-adjust': 'fontSizeAdjust',
+    'font-stretch': 'fontStretch',
+    'font-style': 'fontStyle',
+    'font-variant': 'fontVariant',
+    'font-weight': 'fontWeight',
+    'glyph-name': 'glyphName',
+    'glyph-orientation-horizontal': 'glyphOrientationHorizontal',
+    'glyph-orientation-vertical': 'glyphOrientationVertical',
+    'horiz-adv-x': 'horizAdvX',
+    'horiz-origin-x': 'horizOriginX',
+    'marker-end': 'markerEnd',
+    'marker-mid': 'markerMid',
+    'marker-start': 'markerStart',
+    'overline-position': 'overlinePosition',
+    'overline-thickness': 'overlineThickness',
+    'panose-1': 'panose1',
+    'paint-order': 'paintOrder',
+    'stop-color': 'stopColor',
+    'stop-opacity': 'stopOpacity',
+    'strikethrough-position': 'strikethroughPosition',
+    'strikethrough-thickness': 'strikethroughThickness',
+    'stroke-dasharray': 'strokeDasharray',
+    'stroke-dashoffset': 'strokeDashoffset',
+    'stroke-linecap': 'strokeLinecap',
+    'stroke-linejoin': 'strokeLinejoin',
+    'stroke-miterlimit': 'strokeMiterlimit',
+    'stroke-opacity': 'strokeOpacity',
+    'stroke-width': 'strokeWidth',
+    'text-anchor': 'textAnchor',
+    'text-decoration': 'textDecoration',
+    'text-rendering': 'textRendering',
+    'underline-position': 'underlinePosition',
+    'underline-thickness': 'underlineThickness',
+    'unicode-bidi': 'unicodeBidi',
+    'unicode-range': 'unicodeRange',
+    'units-per-em': 'unitsPerEm',
+    'v-ideographic': 'vIdeographic',
+    'v-alphabetic': 'vAlphabetic',
+    'v-hanging': 'vHanging',
+    'v-mathematical': 'vMathematical',
+    'vert-adv-y': 'vertAdvY',
+    'vert-origin-x': 'vertOriginX',
+    'vert-origin-y': 'vertOriginY',
+    'word-spacing': 'wordSpacing',
+    'writing-mode': 'writingMode',
+    'x-height': 'xHeight'
+}
+
+const vueIcon = (name, content, attributes) => `
+<template>
+    <BsIconBase :size="size" viewBox="${attributes.viewBox}" ${attributes.dataTestId && `data-testid="${attributes.dataTestId}"`}>${content}</BsIconBase>
+</template>
+<script lang="ts" setup>
+import type { PropType } from 'vue';
+import { BsIconBase, BsIconSize } from '${absolutePathToIconBase || (relativePathToIconBasePath && `${relativePathToIconBasePath}BsIconBase`)}';
+
+defineProps({
+    size: {
+        type: String as PropType<\`\${BsIconSize}\`>,
+        default: BsIconSize.base
+    }
+});
+</script>`;
+
+const reactIcon = (name, camelCaseName, content, attributes) => `
+import type { BsIconProps } from '${absolutePathToIconBase || (relativePathToIconBasePath && `${relativePathToIconBasePath}BsIcons/types`)}';
+import { BsIconBase, BsIconSize } from '${absolutePathToIconBase || (relativePathToIconBasePath && `${relativePathToIconBasePath}BsIconBase`)}';
+
+export default function BsIcon${camelCaseName}({
+    size = BsIconSize.base,
+    viewBox = '${attributes.viewBox}',
+    ...attributes
+}: BsIconProps) {
+    return <BsIconBase size={size} viewBox={viewBox} ${attributes.dataTestId && `data-testid="${attributes.dataTestId}"`} {...attributes}>${content}</BsIconBase>;
+}`;
+
+const vueExports = [];
+const reactExports = [];
+const camelize = s => s.replace(/-./g, x => x[1].toUpperCase());
+const capitalize = s => s && s[0].toUpperCase() + s.slice(1);
+const getSvg = async (svgName, doOptimiziation) => {
+    const svgPath = path.join(inputDirectoryPath, svgName);
+    const fileContent = await fsPromise.readFile(svgPath, 'utf8').catch(() => ({}));
+    let optimizedFileContent = fileContent;
+    if (doOptimiziation) {
+        try {
+            optimizedFileContent = optimize(optimizedFileContent, {
+                multipass: true,
+                svg2js: {
+                    pretty: true
+                },
+                plugins: [{
+                    name: 'preset-default',
+                    params: {
+                        overrides: {
+                            removeUselessStrokeAndFill: false,
+                        },
+                    },
+                },]
+            }).data;
+        } catch (error) {
+            console.error('Please install svgo for node in order to do optimization, ' + e);
+        }
+    }
+
+    const fileName = svgName.split('.')[0];
+    return {
+        fileName: camelize(fileName),
+        name: fileName,
+        content: optimizedFileContent.substring(optimizedFileContent.indexOf('>') + 1, optimizedFileContent.lastIndexOf('<')).replace(/"/g, "'"),
+        attrs: {
+            viewBox: /viewBox="([^"]+)"/.exec(fileContent)?.[1]
+        },
+    }
+};
+
+const counterTags = (content) => {
+    const regex = /<([a-z]+)(?=[\s>])(?:[^>=]|='[^']|="[^"]|=[^'"\s])*\s?\/?>/gi;
+    let resultMatch;
+    let count = 0;
+    do {
+        resultMatch = regex.exec(content);
+        if (resultMatch) count++;
+    } while (resultMatch);
+    return count;
+}
+
+const createExports = async (file, doOptimiziation) => {
+    const splitFileName = file.split('.');
+    if (splitFileName[splitFileName.length - 1] === 'svg') {
+        const {
+            fileName,
+            name,
+            content,
+            attrs
+        } = await getSvg(file, doOptimiziation);
+
+        const capitializedCamelCaseName = capitalize(camelize(fileName));
+        const attributes = { viewBox: attrs.viewBox ?? '0 0 24 24' };
+        if(process.env.PROD !== "true") {
+            attributes['dataTestId'] = name;
+        }
+        const componentName = `BsIcon${capitializedCamelCaseName}`;
+
+        if (framework === 'vue') {
+            await fsPromise.writeFile(
+                `${outputDirectoryPath}${componentName}.vue`,
+                vueIcon(name, content, attributes)
+            );
+            vueExports.push(componentName);
+        } else if (framework === 'react') {
+            let parsedContent = content;
+            for (let attr in attributesMap) {
+                parsedContent = parsedContent.replaceAll(attr, attributesMap[attr]);
+            }
+
+            parsedContent = counterTags(parsedContent) <= 1 ? parsedContent : `<>${parsedContent}</>`
+
+            await fsPromise.writeFile(
+                `${outputDirectoryPath}${componentName}.tsx`,
+                reactIcon(name, capitializedCamelCaseName, parsedContent, attributes)
+            );
+            reactExports.push(componentName);
+        }
+    }
+}
+
+const sortVueExports = (fileName) => {
+    let vueExportsString = "export * from './types';\n"
+    vueExports.sort();
+    vueExports.forEach(component => {
+        vueExportsString += `export { default as ${component} } from './${component}.vue';\n`;
+    });
+    fsPromise.writeFile(`${outputDirectoryPath}${fileName}.ts`, vueExportsString);
+}
+
+const sortReactExports = (fileName) => {
+    let reactExportsString = "export * from './types';\n"
+    reactExports.sort();
+    reactExports.forEach(component => {
+        reactExportsString += `export { default as ${component} } from './${component}';\n`;
+    });
+    fsPromise.writeFile(`${outputDirectoryPath}${fileName}.ts`, reactExportsString);
+}
+
+const createIndexFiles = (frameworkName, fileName = 'index') => {
+    if (frameworkName === 'vue') {
+        sortVueExports(fileName);
+    } else {
+        sortReactExports(fileName);
+    }
+}
+
+const generateIconFiles = async (err, files) => {
+    if (err) {
+        return console.log('Unable to get icons directory: ' + err);
+    }
+    const doOptimiziation = (getArgValue('optimize') ?? 'true') === 'true';
+    console.log(`Creating ${framework} icons 🎉 ...`);
+
+    if (!fs.existsSync(outputDirectoryPath)) {
+        fs.mkdirSync(outputDirectoryPath);
+    }
+
+    for await (const file of files) {
+       await createExports(file, doOptimiziation);
+    };
+
+    if (vueExports.length) {
+        createIndexFiles('vue');
+    }
+    if (reactExports.length) {
+        createIndexFiles('react')
+    }
+
+    console.log(`Creating icons has finished!`);
+}
+fs.readdir(inputDirectoryPath, generateIconFiles);
+
+

@@ -1,0 +1,4 @@
+{
+  "extends": "@barnstormer/tests-shared/.nycrc.json",
+  "extension": [".js", ".ts", ".vue"]
+}

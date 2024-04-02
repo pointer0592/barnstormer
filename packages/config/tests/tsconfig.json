@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+        "sourceMap": true,
+        "noEmit": true,
+        "target": "ESNext",
+        "module": "ESNext",
+        "strict": true,
+        "esModuleInterop": true,
+        "moduleResolution": "node",
+        "baseUrl": ".",
+        "noImplicitAny": true,
+        "types": [
+            "vite/client"
+        ]
+    },
+    "include": [
+        "**/*.ts"
+    ]
+}

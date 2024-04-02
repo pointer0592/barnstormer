@@ -1,0 +1,48 @@
+import classNames from 'classnames';
+import { clamp, roundToNearest } from '@barnstormer/shared';
+import { BsIconStarFilled, BsIconStar, BsIconStarHalf, BsRatingSize } from '@barnstormer/react';
+import type { BsRatingProps } from '@barnstormer/react';
+
+const sizeClasses = {
+  [BsRatingSize.xs]: 'text-xs',
+  [BsRatingSize.sm]: 'text-sm',
+  [BsRatingSize.base]: 'text-base',
+  [BsRatingSize.lg]: 'text-lg',
+  [BsRatingSize.xl]: 'text-xl',
+};
+
+export default function BsRating({
+  size = BsRatingSize.base,
+  max = 5,
+  value = 0,
+  halfIncrement,
+  ariaLabel,
+  className,
+  ...attributes
+}: BsRatingProps) {
+  const precision = halfIncrement ? 0.5 : 1;
+  const ratingValue = clamp(roundToNearest(value, precision), 0, max);
+  const partiallyFilled = Number(!Number.isInteger(ratingValue)); // 0 or 1
+  const filled = Math.ceil(ratingValue - partiallyFilled);
+  const empty = max - filled - partiallyFilled;
+  const label = ariaLabel ?? `${value} out of ${max}`;
+
+  return (
+    <div
+      role="img"
+      aria-label={label}
+      title={label}
+      className={classNames('inline-flex items-center text-warning-500', sizeClasses[size], className)}
+      data-testid="rating"
+      {...attributes}
+    >
+      {[...Array(filled).keys()].map((key) => (
+        <BsIconStarFilled aria-hidden="true" className="w-[1.5em] h-[1.5em]" key={key} />
+      ))}
+      {Boolean(partiallyFilled) && <BsIconStarHalf aria-hidden="true" className="w-[1.5em] h-[1.5em]" />}
+      {[...Array(empty).keys()].map((key) => (
+        <BsIconStar aria-hidden="true" className="text-disabled-500 w-[1.5em] h-[1.5em]" key={key} />
+      ))}
+    </div>
+  );
+}

@@ -1,0 +1,16 @@
+{
+  "exclude": [
+    "node_modules",
+    "coverage/",
+    "cypress",
+    "components/BsIcons"
+  ],
+  "include": [
+    "**"
+  ],
+  "checkCoverage": true,
+  "statements": 55,
+  "branches": 55,
+  "functions": 55,
+  "lines": 55
+}

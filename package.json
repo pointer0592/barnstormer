@@ -1,0 +1,92 @@
+{
+  "name": "@barnstormer/monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": {
+    "packages": [
+      "apps/*",
+      "apps/docs/*",
+      "apps/preview/*",
+      "apps/shared",
+      "packages/*",
+      "packages/config/*",
+      "packages/barnstormerui/*",
+      "packages/barnstormerui/frameworks/*"
+    ]
+  },
+  "scripts": {
+    "postinstall": "node hasEnv NOT_GENERATE_ICON && yarn generate-icons",
+    "generate-icons": "yarn createVueIcons && yarn createReactIcons && yarn lint:fix:barnstormerui",
+    "prepare": "husky install",
+    "build": "yarn update-browserlist-db && yarn generate-icons && yarn build:peer-next && turbo run build",
+    "dev:docs": "yarn update-browserlist-db && turbo run dev:docs",
+    "dev": "yarn update-browserlist-db && yarn build:typography && yarn build:peer-next && yarn build:tailwind-config && yarn build:test-utils && yarn build:react && turbo run dev --parallel",
+    "dev:shared": "turbo run dev:shared",
+    "update-browserlist-db": "yarn dlx browserslist@latest",
+    "lint": "yarn build:typography && yarn build:peer-next && yarn build:tailwind-config && turbo run lint",
+    "lint:fix": "turbo run lint:fix",
+    "lint:fix:barnstormerui": "turbo run lint:fix:barnstormerui",
+    "build:docs": "yarn build:peer-next && turbo run build:docs",
+    "build:next": "turbo run build:next",
+    "build:nuxt": "turbo run build:nuxt",
+    "build:replace-assets-url-with": "frs-replace \"http:\\/\\/localhost:3100\\/@assets\\/\" \"https://storage.googleapis.com/barnstormerui_docs_artifacts_bucket_public/$ENV_NAME/\" -i \"apps/preview/*/pages/**/*\" -s \"preserve-structure\" -o .",
+    "build:nuxt-module": "turbo run build:nuxt-module",
+    "build:react": "turbo run build:react",
+    "build:vue": "turbo run build:vue",
+    "build:release": "turbo run build:release",
+    "build:tailwind-config": "turbo run build:tailwind-config",
+    "build:typography": "turbo run build:typography",
+    "build:peer-next": "turbo run build:peer-next",
+    "build:tw-plugin-peer-next": "turbo run builtd:w-plugin-peer-next",
+    "test": "turbo run test",
+    "test:ci-pre:vue": "yarn build:peer-next && turbo run test:ci-pre:vue",
+    "test:ci:vue": "yarn build:peer-next && turbo run test:ci:vue",
+    "test:ci-pre:react": "yarn build:peer-next && turbo run test:ci-pre:react",
+    "test:ci:react": "yarn build:peer-next && turbo run test:ci:react",
+    "test-docs": "yarn turbo run docs-test",
+    "test-e2e:docs": "concurrently \"yarn wait-on http://localhost:8080/v2 http://localhost:3001 http://localhost:3002 && yarn test-docs\" \"yarn dev\" \"yarn dev:docs\"",
+    "clean": "rimraf ./**/node_modules && rm yarn.lock",
+    "clean:total": "rimraf ./**/node_modules ./**/.cache ./**/.turbo && rm yarn.lock",
+    "createVueIcons": "node createIcons framework=vue input=packages/barnstormerui/assets/ output=packages/barnstormerui/frameworks/vue/components/BsIcons/ absolutePathToIconBase=@barnstormer/vue",
+    "createReactIcons": "node createIcons framework=react input=packages/barnstormerui/assets/ output=packages/barnstormerui/frameworks/react/components/BsIcons/ absolutePathToIconBase=@barnstormer/react",
+    "hygen": "./node_modules/.bin/hygen",
+    "component": "yarn hygen component",
+    "component-new": "yarn hygen component new"
+  },
+  "devDependencies": {
+    "@barnstormer/prettier-config": "^1.0.0",
+    "@barnstormer/typescript-config": "workspace:*",
+    "@changesets/changelog-github": "^0.4.8",
+    "@changesets/cli": "^2.26.1",
+    "@commitlint/cli": "^17.0.0",
+    "@commitlint/config-conventional": "^17.0.0",
+    "@frsource/frs-replace": "^4.1.1",
+    "babel-cli": "^6.26.0",
+    "babel-preset-node": "^5.1.1",
+    "commitizen": "^4.2.5",
+    "concurrently": "^7.4.0",
+    "husky": "^8.0.0",
+    "hygen": "^6.2.8",
+    "prettier": "latest",
+    "rimraf": "^5.0.0",
+    "tailwindcss": "^3.1.8",
+    "turbo": "latest",
+    "typescript": "^4.9.5",
+    "wait-on": "^7.0.1"
+  },
+  "engines": {
+    "npm": ">=8.19.1",
+    "yarn": ">=1.22.19",
+    "node": ">=16.0.0 <17.0.0"
+  },
+  "packageManager": "yarn@3.7.0",
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog",
+      "disableScopeLowerCase": true
+    }
+  },
+  "resolutions": {
+    "@changesets/assemble-release-plan@^5.2.3": "patch:@changesets/assemble-release-plan@npm%3A5.2.3#./.yarn/patches/@changesets-assemble-release-plan-npm-5.2.3-296454a28f.patch"
+  }
+}

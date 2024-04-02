@@ -1,0 +1,14 @@
+{
+  "exclude": [
+    "node_modules",
+    "coverage/",
+    "cypress",
+    "barnstormerui/react/components/BsIcons",
+    "barnstormerui/tests"
+  ],
+  "include": [
+    "barnstormerui/react"
+  ],
+  "reporter": [],
+  "extension": [".js", ".ts", ".jsx", ".tsx"]
+}

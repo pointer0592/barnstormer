@@ -1,0 +1,18 @@
+{
+  "extends": "@barnstormer/typescript-config/base.json",
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "allowJs": true,
+    "resolveJsonModule": true,
+    "jsx": "preserve",
+    "types": ["vite/client"],
+    "baseUrl": "./",
+    "paths": {
+      "~/*": ["./*"],
+      "@barnstormer/vue": ["../../../packages/barnstormerui/frameworks/vue/index.ts"],
+      "@barnstormer/react": ["../../../packages/barnstormerui/frameworks/vue/index.ts"]
+    }
+  },
+  "exclude": ["node_modules", "output", "pages/examples/ListOfIcons.vue"]
+}

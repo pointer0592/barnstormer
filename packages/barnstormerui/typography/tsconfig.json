@@ -1,0 +1,16 @@
+{
+  "extends": "@barnstormer/typescript-config/base.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "sourceMap": true,
+    "noEmit": true,
+    "target": "ESNext",
+    "module": "ESNext",
+    "baseUrl": ".",
+    "types": [
+      "vite/client"
+    ]
+  },
+  "include": ["**/*.ts"],
+  "exclude": ["./dist/**/*"]
+}

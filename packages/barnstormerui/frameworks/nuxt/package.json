@@ -1,0 +1,49 @@
+{
+  "name": "@barnstormer/nuxt",
+  "version": "2.4.4",
+  "homepage": "https://docs.barnstormerui.online/",
+  "installConfig": {
+    "hoistingLimits": "workspaces"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pointer0592/barnstormer.git",
+    "directory": "packages/barnstormerui/frameworks/nuxt"
+  },
+  "bugs": {
+    "url": "https://github.com/pointer0592/barnstormer/issues"
+  },
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/types.d.ts",
+      "import": "./dist/module.mjs",
+      "require": "./dist/module.cjs"
+    }
+  },
+  "main": "./dist/module.cjs",
+  "types": "./dist/types.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build:nuxt-module": "nuxi prepare playground && nuxt-module-build",
+    "dev:playground": "nuxi dev playground",
+    "dev:build": "nuxi build playground",
+    "dev:prepare": "nuxt-module-build --stub && nuxi prepare playground"
+  },
+  "dependencies": {
+    "@barnstormer/vue": "workspace:*",
+    "@nuxt/kit": "^3.3.2",
+    "@nuxtjs/tailwindcss": "^6.6.4"
+  },
+  "devDependencies": {
+    "@nuxt/module-builder": "^0.5.0",
+    "@nuxt/schema": "^3.3.2",
+    "nuxt": "^3.3.2"
+  }
+}

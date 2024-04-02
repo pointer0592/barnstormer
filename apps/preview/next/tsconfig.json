@@ -1,0 +1,53 @@
+{
+  "extends": "@barnstormer/typescript-config/base.json",
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "display": "Default",
+  "compilerOptions": {
+    "declaration": false,
+    "declarationMap": false,
+    "strictPropertyInitialization": false,
+    "target": "ESNext",
+    "lib": [
+      "DOM",
+      "DOM.Iterable",
+      "ESNext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "preserveConstEnums": true,
+    "baseUrl": "./",
+    "paths": {
+      "~/*": [
+        "./*"
+      ]
+    },
+    "incremental": true
+  },
+  "include": [
+    "components/**/*.ts",
+    "components/**/*.tsx",
+    "next-env.d.ts",
+    "pages/**/*.ts",
+    "pages/**/*.tsx",
+    "pages/_document.tsx",
+    "hooks/**/*.tsx",
+    "layouts/**/*.tsx",
+    "node_modules/@storefont-ui/react",
+    "node_modules/@storefont-ui/shared"
+  ],
+  "exclude": [
+    ".next",
+    "dist",
+    "lib",
+    "output"
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["github>pointer0592/.github:renovate-config"],
+  "packageRules": [
+    {
+      "matchPackagePatterns": [
+        "eslint-config-next"
+      ],
+      "enabled": false
+    }
+  ]
+}

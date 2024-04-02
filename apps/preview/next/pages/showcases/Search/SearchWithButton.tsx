@@ -1,0 +1,220 @@
+/* eslint-disable no-alert */
+/* eslint-disable no-console */
+import { ShowcasePageLayout } from '../../showcases';
+// #region source
+import { type ChangeEvent, type FormEvent, type KeyboardEvent, useState, useRef } from 'react';
+import { useDebounce } from 'react-use';
+import { offset } from '@floating-ui/react-dom';
+import {
+  BsButton,
+  BsInput,
+  BsIconSearch,
+  BsIconCancel,
+  useDisclosure,
+  BsListItem,
+  BsLoaderCircular,
+  useTrapFocus,
+  useDropdown,
+  BsIconGridView,
+} from '@barnstormer/react';
+
+interface Product {
+  id: string;
+  name: string;
+  thumbnail?: JSX.Element;
+  image?: string;
+}
+
+const mockProducts: Product[] = [
+  { id: 'j-avatar', name: 'jack', image: 'http://localhost:3100/@assets/kid.png' },
+  { id: 'j-cat', name: 'jackets', thumbnail: <BsIconGridView /> },
+  { id: 'j-wom', name: 'jacket women', thumbnail: <BsIconSearch /> },
+  { id: 'j-den', name: 'jacket denim', thumbnail: <BsIconSearch /> },
+  { id: 'j-dre', name: 'jacket dress', thumbnail: <BsIconSearch /> },
+  { id: 'dr-cat', name: 'dresses', thumbnail: <BsIconGridView /> },
+  { id: 'dr-cot', name: 'cotton dresses', thumbnail: <BsIconSearch /> },
+  { id: 'dr-wom', name: 'dresses women', thumbnail: <BsIconSearch /> },
+  { id: 'dr-sum', name: 'summer dresses', thumbnail: <BsIconSearch /> },
+];
+
+// Just for presentation purposes. Replace mock request with the actual API call.
+// eslint-disable-next-line no-promise-executor-return
+const delay = () => new Promise((resolve) => setTimeout(resolve, Math.random() * 1000));
+const mockAutocompleteRequest = async (phrase: string) => {
+  await delay();
+  const results = mockProducts
+    .filter((product) => product.name.toLowerCase().startsWith(phrase.toLowerCase()))
+    .map((product) => {
+      const highlight = product.name.substring(0, phrase.length);
+      const rest = product.name.substring(phrase.length);
+      return { highlight, rest, product };
+    });
+  return results;
+};
+
+export default function SearchWithIcon() {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const dropdownListRef = useRef<HTMLUListElement>(null);
+  const [searchValue, setSearchValue] = useState('');
+  const [isLoadingSnippets, setIsLoadingSnippets] = useState(false);
+  const [snippets, setSnippets] = useState<{ highlight: string; rest: string; product: Product }[]>([]);
+  const { isOpen, close, open } = useDisclosure();
+  const { refs, style } = useDropdown({
+    isOpen,
+    onClose: close,
+    placement: 'bottom-start',
+    middleware: [offset(4)],
+  });
+  const { focusables: focusableElements, updateFocusableElements } = useTrapFocus(dropdownListRef, {
+    trapTabs: false,
+    arrowKeysUpDown: true,
+    activeState: isOpen,
+    initialFocus: false,
+  });
+  const isResetButton = Boolean(searchValue);
+  const handleSubmit = (event: FormEvent) => {
+    event.preventDefault();
+    close();
+    alert(`Search for phrase: ${searchValue}`);
+  };
+
+  const handleFocusInput = () => {
+    inputRef.current?.focus();
+  };
+
+  const handleReset = () => {
+    setSearchValue('');
+    setSnippets([]);
+    close();
+    handleFocusInput();
+  };
+
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const phrase = event.target.value;
+    if (phrase) {
+      setSearchValue(phrase);
+    } else {
+      handleReset();
+    }
+  };
+
+  const handleSelect = (phrase: string) => () => {
+    setSearchValue(phrase);
+    close();
+    handleFocusInput();
+  };
+
+  const handleInputKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === 'Escape') handleReset();
+    if (event.key === 'ArrowUp') {
+      open();
+      updateFocusableElements();
+      if (isOpen && focusableElements.length > 0) {
+        focusableElements[focusableElements.length - 1].focus();
+      }
+    }
+    if (event.key === 'ArrowDown') {
+      open();
+      updateFocusableElements();
+      if (isOpen && focusableElements.length > 0) {
+        focusableElements[0].focus();
+      }
+    }
+  };
+
+  useDebounce(
+    () => {
+      if (searchValue) {
+        const getSnippets = async () => {
+          open();
+          setIsLoadingSnippets(true);
+          try {
+            const data = await mockAutocompleteRequest(searchValue);
+            setSnippets(data);
+          } catch (error) {
+            close();
+            console.error(error);
+          }
+          setIsLoadingSnippets(false);
+        };
+
+        getSnippets();
+      }
+    },
+    500,
+    [searchValue],
+  );
+
+  return (
+    <form role="search" onSubmit={handleSubmit} ref={refs.setReference} className="relative">
+      <div className="flex">
+        <BsInput
+          ref={inputRef}
+          value={searchValue}
+          onChange={handleChange}
+          onFocus={open}
+          wrapperClassName="w-full !ring-0 active:!ring-0 hover:!ring-0 focus-within:!ring-0 border-y border-l border-neutral-200 rounded-r-none hover:border-primary-800 active:border-primary-700 active:border-y-2 active:border-l-2 focus-within:border-y-2 focus-within:border-l-2 focus-within:border-primary-700"
+          aria-label="Search"
+          placeholder="Search 'jackets' or 'dresses'..."
+          onKeyDown={handleInputKeyDown}
+          slotPrefix={<BsIconSearch />}
+          slotSuffix={
+            isResetButton && (
+              <button
+                type="reset"
+                onClick={handleReset}
+                aria-label="Reset search"
+                className="flex rounded-md focus-visible:outline focus-visible:outline-offset"
+              >
+                <BsIconCancel />
+              </button>
+            )
+          }
+        />
+        <BsButton type="submit" className="rounded-l-none">
+          Search
+        </BsButton>
+      </div>
+      {isOpen && (
+        <div ref={refs.setFloating} style={style} className="left-0 right-0">
+          {isLoadingSnippets ? (
+            <div className="flex items-center justify-center bg-white w-full h-screen sm:h-20 py-2 sm:border sm:border-solid sm:rounded-md sm:border-neutral-100 sm:drop-shadow-md">
+              <BsLoaderCircular />
+            </div>
+          ) : (
+            snippets.length > 0 && (
+              <ul
+                ref={dropdownListRef}
+                className="py-2 bg-white sm:border border-solid sm:rounded-md sm:border-neutral-100 sm:drop-shadow-md"
+              >
+                {snippets.map(({ highlight, rest, product }) => (
+                  <li key={product.id}>
+                    <BsListItem
+                      as="button"
+                      type="button"
+                      onClick={handleSelect(product.name)}
+                      className="!py-4 sm:!py-2 flex justify-start"
+                    >
+                      <p className="flex items-center text-left text-neutral-500">
+                        {product.image ? (
+                          <img src={product.image} alt={product.name} className="rounded-sm" width="24" height="24" />
+                        ) : (
+                          product.thumbnail
+                        )}
+                        <span className="ml-2 text-neutral-900">{highlight}</span>
+                        <span className="font-medium text-neutral-900">{rest}</span>
+                      </p>
+                    </BsListItem>
+                  </li>
+                ))}
+              </ul>
+            )
+          )}
+        </div>
+      )}
+    </form>
+  );
+}
+
+// #endregion source
+SearchWithIcon.getLayout = ShowcasePageLayout;

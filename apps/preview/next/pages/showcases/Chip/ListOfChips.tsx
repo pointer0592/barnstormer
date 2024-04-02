@@ -1,0 +1,38 @@
+import { ShowcasePageLayout } from '../../showcases';
+// #region source
+import { BsChip, BsThumbnail } from '@barnstormer/react';
+import classNames from 'classnames';
+
+const chipValues = [
+  { label: 'Red', value: 'red' },
+  { label: 'Blue', value: 'blue' },
+  { label: 'Gray', value: 'gray' },
+];
+
+export default function ChipList() {
+  return (
+    <ul className="flex flex-wrap gap-4 sm:flex-row">
+      {chipValues.map(({ label, value }) => (
+        <li key={value}>
+          <BsChip
+            className="mr-2"
+            slotPrefix={
+              <BsThumbnail
+                className={classNames({
+                  'bg-red-500': value === 'red',
+                  'bg-blue-500': value === 'blue',
+                  'bg-gray-500': value === 'gray',
+                })}
+              />
+            }
+          >
+            {label}
+          </BsChip>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+// #endregion source
+ChipList.getLayout = ShowcasePageLayout;
