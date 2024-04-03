@@ -1,6 +1,6 @@
 import { defineNuxtModule, addComponent, addImportsSources, installModule, addImports } from '@nuxt/kit';
 import { NuxtOptions } from '@nuxt/schema';
-import * as storefrontUi from '@barnstormer/vue';
+import * as barnstormerUi from '@barnstormer/vue';
 import { tailwindConfig } from '@barnstormer/vue/tailwind-config';
 
 // Module options TypeScript interface definition
