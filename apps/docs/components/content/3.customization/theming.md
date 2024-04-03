@@ -11,7 +11,7 @@ In addition to [Tailwind's default colors](https://tailwindcss.com/docs/customiz
 :color-palette
 
 :::tip Want to see our default Tailwind preset?
-You can see all of the default colors, classes, variants, and more in our [Tailwind preset](https://github.com/vuestorefront/storefront-ui/blob/v2/packages/config/tailwind/index.ts)
+You can see all of the default colors, classes, variants, and more in our [Tailwind preset](https://github.com/pointer0592/barnstormer/blob/v2/packages/config/tailwind/index.ts)
 :::
 
 ## Customizing colors

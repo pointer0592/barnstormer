@@ -12,7 +12,7 @@ export default defineConfig({
   build: {
     lib: {
       entry: path.resolve(__dirname, 'index.ts'),
-      name: 'storefront-ui-tests-utils',
+      name: 'barnstormerui-tests-utils',
       fileName: (format) => format === 'es' ? `index.mjs` : `index.${format}.js`,
     },
     rollupOptions: {

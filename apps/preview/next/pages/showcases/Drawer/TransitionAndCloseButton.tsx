@@ -81,11 +81,11 @@ export default function DrawerWithTransition() {
             <div className="p-5 px-10">
               <p className="mb-2">
                 Focus is trapped inside this Drawer and <strong>tab</strong> button cycle through{' '}
-                <a href="https://docs.storefrontui.io/v2/" className="underline text-primary-700">
+                <a href="https://docs.barnstormer.com/" className="underline text-primary-700">
                   Focusable Element
                 </a>{' '}
                 and another{' '}
-                <a href="https://docs.storefrontui.io/v2/" className="underline text-primary-700">
+                <a href="https://docs.barnstormer.com/" className="underline text-primary-700">
                   Focusable Element
                 </a>
               </p>

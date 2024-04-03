@@ -15,7 +15,7 @@ export default defineConfig({
     },
     lib: {
       entry: path.resolve(__dirname, 'index.ts'),
-      name: 'storefront-ui-tw-plugin-peer-next',
+      name: 'barnstormerui-tw-plugin-peer-next',
       fileName: (format) => format === 'es' ? `index.mjs` : `index.${format}.js`,
     },
   },

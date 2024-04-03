@@ -17,7 +17,7 @@ export function useFramework() {
     {
       name: 'qwik',
       icon: 'logos:qwik-icon',
-      link: 'https://qwik-storefront-ui.pages.dev',
+      link: 'https://qwik-barnstormerui.pages.dev',
     },
   ];
 

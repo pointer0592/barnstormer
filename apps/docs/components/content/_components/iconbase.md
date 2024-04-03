@@ -80,7 +80,7 @@ If you're using a custom icon, you need to specify either the `viewBox` or `widt
 
 ## Notes
 
-Barnstormer UI icons are generated with use of [`createIcons.js`](https://github.com/vuestorefront/storefront-ui/blob/v2/createIcons.js) script and they are based on `IconBase` component.
+Barnstormer UI icons are generated with use of [`createIcons.js`](https://github.com/pointer0592/barnstormer/blob/v2/createIcons.js) script and they are based on `IconBase` component.
 
 ## Accessibility notes
 

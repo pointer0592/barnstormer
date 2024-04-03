@@ -12,7 +12,7 @@ export default defineConfig({
   build: {
     lib: {
       entry: path.resolve(__dirname, 'index.ts'),
-      name: 'storefront-ui-shared',
+      name: 'barnstormerui-shared',
       fileName: (format) => format === 'es' ? `index.mjs` : `index.${format}.js`,
     },
   },

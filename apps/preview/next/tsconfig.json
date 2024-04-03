@@ -41,8 +41,8 @@
     "pages/_document.tsx",
     "hooks/**/*.tsx",
     "layouts/**/*.tsx",
-    "node_modules/@storefont-ui/react",
-    "node_modules/@storefont-ui/shared"
+    "node_modules/@barnstormer/react",
+    "node_modules/@barnstormer/shared"
   ],
   "exclude": [
     ".next",

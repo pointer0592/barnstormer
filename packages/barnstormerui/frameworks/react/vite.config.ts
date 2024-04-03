@@ -20,7 +20,7 @@ export default defineConfig({
         index: path.resolve(__dirname, 'index.ts'),
         'tailwind-config': path.resolve(__dirname, 'tailwind-config.ts'),
       },
-      name: 'storefront-ui-react',
+      name: 'barnstormerui-react',
       fileName: (format, entryName) => format === 'es'
         ? `${entryName}.mjs`
         : `${entryName}.${format}.js`,

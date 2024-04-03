@@ -10,7 +10,7 @@ export interface ModuleOptions {
 
 export default defineNuxtModule<ModuleOptions>({
   meta: {
-    name: 'barnstormer-ui',
+    name: 'barnstormerui',
     configKey: 'barnstormerUi',
     compatibility: {
       nuxt: '>=3.0.0',

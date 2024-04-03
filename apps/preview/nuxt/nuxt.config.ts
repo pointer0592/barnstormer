@@ -11,7 +11,7 @@ export default defineNuxtConfig({
       htmlAttrs: {
         lang: 'en',
       },
-      title: 'Alokai UI v2',
+      title: 'Barnstormer UI',
     },
   },
   alias: {

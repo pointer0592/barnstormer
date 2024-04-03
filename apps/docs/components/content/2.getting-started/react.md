@@ -11,7 +11,7 @@ Since Barnstormer UI is designed to fit seamlessly into your Tailwind CSS workfl
 You can try out Barnstormer UI in your browser with our online playground.
 
 <div class="custom-block mt-8">
-<a href="http://play-react.vuestorefront.io/" target="_blank" rel="noopener noreferrer" class="custom-block dark:text-white font-medium px-4 py-2 border-green border-2 rounded-lg hover:bg-green transition-colors hover:text-white">Stackblitz playground</a>
+<a href="http://play-react.barnstormerui.com/" target="_blank" rel="noopener noreferrer" class="custom-block dark:text-white font-medium px-4 py-2 border-green border-2 rounded-lg hover:bg-green transition-colors hover:text-white">Stackblitz playground</a>
 </div>
 
 ::tabs{:titles='["Next.js", "Vite"]' class="mt-8"}

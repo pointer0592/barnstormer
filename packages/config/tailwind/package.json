@@ -19,7 +19,7 @@
     "dev-only": "vite build --watch",
     "build:tailwind-config": "vite build"
   },
-  "homepage": "https://docs.barnstormer.online",
+  "homepage": "https://docs.barnstormerui.com",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/pointer0592/barnstormer/.git",

@@ -13,7 +13,7 @@ export default defineConfig({
   build: {
     lib: {
       entry: path.resolve(__dirname, 'index.ts'),
-      name: 'barnstormer-tailwind-config',
+      name: 'barnstormerui-tailwind-config',
       fileName: (format) => format === 'es' ? `index.mjs` : `index.${format}.js`,
     },
     rollupOptions: {

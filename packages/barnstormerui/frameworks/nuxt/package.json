@@ -1,7 +1,7 @@
 {
   "name": "@barnstormer/nuxt",
-  "version": "2.4.4",
-  "homepage": "https://docs.barnstormerui.online/",
+  "version": "1.0.0",
+  "homepage": "https://docs.barnstormerui.com/",
   "installConfig": {
     "hoistingLimits": "workspaces"
   },

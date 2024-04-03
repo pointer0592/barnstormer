@@ -1,6 +1,6 @@
 {
   "name": "@barnstormer/react",
-  "version": "2.6.1",
+  "version": "1.0.0",
   "license": "MIT",
   "sideEffects": false,
   "exports": {
@@ -67,13 +67,13 @@
   "publishConfig": {
     "access": "public"
   },
-  "homepage": "https://docs.storefrontui.io/v2/#react",
+  "homepage": "https://docs.barnstormer.com/#react",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vuestorefront/storefront-ui.git",
+    "url": "git+https://github.com/pointer0592/barnstormer.git",
     "directory": "packages/barnstormerui/frameworks/react"
   },
   "bugs": {
-    "url": "https://github.com/vuestorefront/storefront-ui/issues"
+    "url": "https://github.com/pointer0592/barnstormer/issues"
   }
 }

@@ -11,7 +11,7 @@ declare module 'tailwindcss/types/config' {
   }
 }
 
-const PLUGIN_CONFIG_KEY = 'sfTypography';
+const PLUGIN_CONFIG_KEY = 'bsTypography';
 
 export default plugin.withOptions(
   ({ utilityPrefix = 'typography' }: Options = {}) =>

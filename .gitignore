@@ -1,41 +1,69 @@
-# Dependency directories
-node_modules
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# Logs
+# dependencies
+node_modules
+.pnp
+.pnp.js
+
+# testing
+coverage
+.nyc_output
+apps/test/vue/src/components/sfui/
+apps/test/react/src/components/sfui/
+
+# next.js
+.next/
+out/
+build
+
+# misc
+.DS_Store
+.idea
+*.pem
+.vscode
+
+# debug
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-lerna-debug.log*
+.pnpm-debug.log*
 
-# NPM config
-.npmrc
+# local env files
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env
 
-# Yarn Integrity file
-.yarn-integrity
-
-# Rollup generate output
-lib
+# turbo and others
+.turbo
+.output
+.nuxt
+lib/
 dist
 
-# Coverage directory used by tools like istanbul
-coverage
+# Yarn
+.yarn/*
+*/.yarn
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
 
-# Editor directories and files
-.idea
-.vscode
+# docs
+apps/docs/components/react/components
+apps/docs/components/vue/components
+apps/docs/components/react/showcases
+apps/docs/components/vue/showcases
+apps/docs/components/react/blocks
+apps/docs/components/vue/blocks
+apps/docs/components/react/customization
+apps/docs/components/vue/customization
+apps/docs/components/react/hooks
+apps/docs/components/vue/hooks
+apps/docs/components/utils/components.json
+apps/docs/components/utils/showcases.json
+apps/docs/components/utils/hooks.json
+apps/docs/components/utils/blocks.json
 
-# OS generated files
-.DS_STORE
-
-# Nuxt generated files
-.nuxt
-.output
-
-# Next generated files
-.next
-
-# Cypress generated files
-**/cypress/screenshots
-
-# Local version of changeset's changelog
-.changeset/changelog.js
+.cache_ggshield

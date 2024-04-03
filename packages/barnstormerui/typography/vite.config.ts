@@ -15,7 +15,7 @@ export default defineConfig({
     },
     lib: {
       entry: path.resolve(__dirname, 'index.ts'),
-      name: 'storefront-ui-typography',
+      name: 'barnstormerui-typography',
       fileName: (format) => format === 'es' ? `index.mjs` : `index.${format}.js`,
     },
   },
