@@ -180,7 +180,7 @@ export default class Scrollable {
       }
     }
 
-    // TODO: add proper scrolling effect with timing and easings, now we have no idea when animation ends, therefor cant disable double click during animation and weird behavior. With proper scrolling animation we will be able to add real time dragging not only dragging after mouse/touch UP
+    // TODO: add proper scrolling effect with timing and easing, now we have no idea when animation ends, therefore cant disable double click during animation and weird behavior. With proper scrolling animation we will be able to add real time dragging not only dragging after mouse/touch UP
 
     this.options.onDragEnd?.({
       isDragged: false,

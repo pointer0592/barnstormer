@@ -1,0 +1,18 @@
+packages:
+  - 'packages/**'
+  - 'integrations/**'
+  - 'dashboard'
+  - 'docs'
+  - '!**/test/**'
+  - '!out/**'
+  - 'examples/*'
+  - 'examples/quickstarts/*'
+  - '!**/functions'
+  - 'apps/*',
+  - 'apps/docs/*',
+  - 'apps/preview/*',
+  - 'apps/shared',
+  - 'packages/*',
+  - 'packages/config/*',
+  - 'packages/barnstormerui/*',
+  - 'packages/barnstormerui/frameworks/*'

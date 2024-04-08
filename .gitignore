@@ -67,3 +67,4 @@ apps/docs/components/utils/hooks.json
 apps/docs/components/utils/blocks.json
 
 .cache_ggshield
+/.github/actions/
